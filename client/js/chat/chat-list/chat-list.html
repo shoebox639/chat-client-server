@@ -1,0 +1,9 @@
+<div class="row">
+  <div class="col-md-4" ng-repeat="chat in $ctrl.chats" ng-click="$ctrl.openChat(chat)">
+    <h4>Chat #{{chat.id}}</h4>
+    <p>
+      <strong>{{ chat.messages[0].sender }}:</strong>
+      <span>{{ chat.messages[0].content }}</span>
+    </p>
+  </div>
+</div>

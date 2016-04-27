@@ -6,7 +6,8 @@ module.exports = {
   },
   externals: {
     angular: 'angular',
-    'angular-route': 'angular-route'
+    'angular-route': 'angular-route',
+    'angular-bootstrap': 'angular-bootstrap'
   },
   module: {
     loaders: [

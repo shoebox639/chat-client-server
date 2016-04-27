@@ -1,6 +1,6 @@
-<form class="form-inline" ng-submit="submit(model.usernameInput)">
+<form class="form-inline" ng-submit="$ctrl.submit($ctrl.usernameInput)">
   <div class="form-group">
-    <input class="form-control" ng-model="model.usernameInput" placeholder="Username"/>
+    <input class="form-control" ng-model="$ctrl.usernameInput" placeholder="Username"/>
     <button type="submit" class="btn btn-primary">Connect</button>
   </div>
 </form>

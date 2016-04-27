@@ -1,11 +1,10 @@
 'use strict';
 const SocketMessage = require('../../websocket/socket-message');
-
-const Chat = require('../chat');
+const openConnections = require('./connections');
 
 module.exports = (ws) => (msg) => {
-  const chat = new Chat(msg.username);
-
+  openConnections.add(ws);
+  
   ws.send(new SocketMessage({
     type: 'server-ack'
     // register username with salted hash as id and return it

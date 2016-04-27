@@ -1,6 +1,8 @@
 import SocketMessage from '../../../websocket/socket-message';
+import ChatRoom from '../../../chat/chat-room';
+import extend from 'extend';
 
-export default function ChatServiceFactory($q){
+export default function ChatServiceFactory($rootScope, chatrooms){
   class WS {
     close() {
       if (this.ws) {
@@ -8,22 +10,31 @@ export default function ChatServiceFactory($q){
       }
     }
 
+    onServerAck(msg) {
+      this.ws.send(new SocketMessage({
+        type: 'get-chats'
+      }).toString());
+    }
+
+    onActiveChats(msg) {
+      $rootScope.$apply(() => {
+        chatrooms.rooms = msg.content.chats.map(chatJson => new ChatRoom(chatJson));
+      });
+    }
+
+    onNewMessage(msg) {
+      $rootScope.$apply(() => {
+        chatrooms.rooms[msg.content.chatId].addMessage(msg.content.chatMsg);
+      });
+    }
+
     init(username) {
-      const deferred = $q.defer();
-
-      const onServerAck = (msg) => {
-        this.ws.send(new SocketMessage({
-          type: 'get-chats'
-        }).toString());
-      }
-
-      const onActiveChats = (msg) => {
-        deferred.resolve(msg.content.chats);
-      }
+      this.username = username;
 
       const msgHandlers = {
-        'server-ack': onServerAck,
-        'active-chats': onActiveChats
+        'server-ack': this.onServerAck.bind(this),
+        'active-chats': this.onActiveChats.bind(this),
+        'new-message': this.onNewMessage.bind(this)
       }
       
       this.ws = new WebSocket('ws://localhost:8080/chat');
@@ -53,12 +64,21 @@ export default function ChatServiceFactory($q){
       this.ws.onerror = (ev) => {
         console.error("Socket error: " + ev.data);
       }
+    }
 
-      return deferred.promise;
+    sendMessage(chatId, chatMsg) {
+      extend(chatMsg, { sender: this.username });
+      this.ws.send(new SocketMessage({ 
+        type: 'send-message', 
+        content: {
+          chatId,
+          chatMsg
+        },
+      }).toString());
     }
   }
 
-  return WS;
+  return new WS();
 }
 
-factory.$inject = ['$q'];
+ChatServiceFactory.$inject = ['$rootScope', 'chatrooms'];

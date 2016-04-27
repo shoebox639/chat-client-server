@@ -5,15 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node_modules/gulp/bin/gulp.js build",
+    "build": "bower install && node_modules/gulp/bin/gulp.js build",
     "server": "node_modules/gulp/bin/gulp.js server",
     "clean": "node_modules/gulp/bin/gulp.js clean"
   },
   "author": "Shu Song <shoebox@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "angular": "^1.5.5",
-    "angular-route": "^1.5.5",
     "express": "^4.13.4",
     "express-ws": "^2.0.0-rc.1",
     "extend": "^3.0.0"

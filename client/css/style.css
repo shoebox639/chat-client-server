@@ -1,0 +1,15 @@
+.message-container {
+  margin-bottom: 5px;
+}
+
+.message {
+  background-color:#ddd;
+  padding: 3px 7px;
+  border-radius: 5px;
+}
+
+.message.message-self {
+  background-color:#007AFF;
+  color: #fff;
+  float: right;
+}

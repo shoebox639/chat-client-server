@@ -1,0 +1,20 @@
+<div class="modal-header">
+  <h2>Chat #{{$ctrl.chat.id}}</h2>
+</div>
+<div class="modal-body">
+  <div ng-repeat="msg in $ctrl.chat.messages" class="message-container clearfix" >
+    <strong ng-if="msg.sender !== $ctrl.ChatService.username">{{ msg.sender }}: </strong>
+    <span class="message " ng-class="{'message-self': msg.sender === $ctrl.ChatService.username}">{{ msg.content }}</span>
+  </div>
+</div>
+<div class="modal-footer">
+  <form ng-submit="$ctrl.sendMessage($ctrl.inputText)" class="row">
+    <div class="form-group col-md-10 col-sm-10 col-xs-10">
+      <input type="text" class="form-control" ng-model="$ctrl.inputText"/>
+    </div>
+    <div class="form-group col-md-2 col-sm-2 col-xs-2">
+      <button type="submit" class="btn btn-primary">Send</button>
+    </div>
+  </form>
+</div>
+

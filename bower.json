@@ -1,0 +1,25 @@
+{
+  "name": "chat-client",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Shu Song <shoebox@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/shoebox639/chat-client-server",
+  "moduleType": [
+    "amd"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.5",
+    "angular-bootstrap": "^1.3.2",
+    "angular-route": "^1.5.5"
+  }
+}

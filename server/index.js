@@ -1,12 +1,15 @@
+'use strict';
+
 const express = require('express');
 const path = require('path');
 
-app = express();
+const app = express();
 const expressWs = require('express-ws')(app);
 
 app.use('/chat', require('./ws'));
 
 app.use('/assets', express.static(path.join(__dirname, '..', 'dist')));
+app.use('/vendor', express.static(path.join(__dirname, '..', 'bower_components')));
 app.use('/vendor', express.static(path.join(__dirname, '..', 'node_modules')));
 
 app.use('/', (req, res, next) => {

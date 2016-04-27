@@ -2,40 +2,31 @@ import angular from 'angular';
 import angularRoute from 'angular-route';
 
 import ChatService from './chat-service';
-import template from './chat.html';
+import ChatController from './chat.controller';
+
+import ChatList from './chat-list';
 
 const moduleName = 'app.chat';
-const module = angular.module(moduleName, ['ngRoute']);
+const module = angular.module(moduleName, ['ngRoute', ChatList]);
 
 module.config(function($routeProvider, $locationProvider) {
-  $routeProvider.when('/chat', { template: '<chat-client></chat-client>' });
+  $routeProvider.when('/chat', { 
+    template: `<chat-page></chat-page>`
+  });
 });
 
-class ChatController {
-  constructor($scope, $location, ChatService) {
-    $scope.model = {};
-
-    $scope.username = $location.search().username;
-
-    const chat = new ChatService();
-    chat.init($scope.username).then((chats) => {
-      $scope.chats = chats;
-    });
-
-    $scope.$on('$destroy', () => {
-      chat.close();
-    });
-  }
-}
-
-ChatController.$inject = ['$scope', '$location', 'ChatService'];
-
 module.factory('ChatService', ChatService);
+module.constant('chatrooms', { rooms: [] });
 
-module.component('chatClient', {
+module.component('chatPage', {
   restrict: 'E',
   bindings: {},
-  template,
+  template: `
+    <div>
+      Signed in as: <strong>{{$ctrl.username}}</strong>
+    </div>
+    <chat-list chats="$ctrl.chats.rooms"></chat-list>
+  `,
   controller: ChatController
 });
 
