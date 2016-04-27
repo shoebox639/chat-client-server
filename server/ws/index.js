@@ -30,7 +30,7 @@ router.ws('/', function(ws, req) {
   });
 
   ws.on('close', function(evt) {
-    console.log(evt);
+    console.error(evt);
     openConnections.remove(ws);
     console.log('closing!');
   })

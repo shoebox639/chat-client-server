@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "bower install && node_modules/gulp/bin/gulp.js build",
+    "build": "node_modules/gulp/bin/gulp.js build",
     "server": "node_modules/gulp/bin/gulp.js server",
-    "clean": "node_modules/gulp/bin/gulp.js clean"
+    "clean": "node_modules/gulp/bin/gulp.js clean",
+    "postinstall": "bower install"
   },
   "author": "Shu Song <shoebox@gmail.com>",
   "license": "ISC",
