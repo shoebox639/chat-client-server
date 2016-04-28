@@ -8,23 +8,14 @@ gulp.task('clean', () => {
   return del('dist/**/*');
 });
 
-gulp.task('css', ['clean'], () => {
-  return gulp.src('client/css/**/*')
+gulp.task('watch', ['build'], () => {
+  gulp.watch('client/**/*', ['build']);
+});
+
+gulp.task('build', ['clean'], () => {
+  gulp.src('client/css/**/*')
     .pipe(gulp.dest('dist/css'));
-});
 
-gulp.task('watch', ['css'], () => {
-  const config = require('./webpack.config');
-  config.watch = true;
-
-  gulp.watch('client/css/**/*', ['css']);
-
-  return gulp.src('client/js/main.js')
-    .pipe(webpack(config))
-    .pipe(gulp.dest('dist/'));
-});
-
-gulp.task('build', ['css'], () => {
   return gulp.src('client/js/main.js')
     .pipe(webpack(require('./webpack.config')))
     .pipe(gulp.dest('dist/'));

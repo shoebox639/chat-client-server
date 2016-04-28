@@ -2,13 +2,12 @@
 
 let nextId = 0;
 module.exports = {
-  connections: {},
-  add(ws) {
-    const id = nextId++;
-    this.connections[id] = ws;
-    ws.id = id;
+  connections: [],
+  add(username, ws) {
+    this.connections.push(ws);
+    ws.username = username;
   },
   remove(ws) {
-    delete this.connections[ws.id];
+    this.connections = this.connections.filter(socket => socket.username !== ws.username);
   }
 };

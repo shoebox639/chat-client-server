@@ -7,14 +7,31 @@
 
     <script src="/vendor/angular/angular.js"></script>
     <script src="/vendor/angular-route/angular-route.js"></script>
+    <script src="/vendor/angular-cookies/angular-cookies.js"></script>
     <script src="/vendor/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="/assets/main.js"></script>
 
     <base href="/" />
   </head>
   <body ng-app="app">
-    <div class="container">
-      <h1>Chat</h1>
+    <div class="container" ng-controller="rootController">
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="/">
+              <i class="glyphicon glyphicon-thumbs-down"></i>
+            </a>
+          </div>
+          <div class="collpase navbar-collapse">
+            <ul ng-if="$ctrl.username" class="nav navbar-nav navbar-right">
+              <li><a>Signed in as: <strong>{{ $ctrl.username }}</strong></a></li>
+              <li><a href="/logout" >Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <h1>{{ $ctrl.title }}</h1>
+      <div class="lead">{{ $ctrl.subtitle }}</div>
       <ng-view></ng-view>
     </div>
   </body>

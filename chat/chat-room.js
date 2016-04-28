@@ -2,7 +2,7 @@
 
 class Chat {
   constructor(config) {
-    if (typeof config === 'number') {
+    if (typeof config == 'string') {
       const id = config;
       this.id = id;
       this.messages = [];
@@ -15,6 +15,23 @@ class Chat {
 
   addMessage(msg) {
     this.messages.push(msg);
+  }
+
+  lastMessage() {
+    if (this.messages.length) {
+      return this.messages[this.messages.length - 1];
+    }
+    else {
+      return {};
+    }
+  }
+
+  numUnread() {
+    return this.messages.filter(msg => !msg.read).length;
+  }
+
+  readAll() {
+    this.messages.forEach(msg => msg.read = true);
   }
 }
 

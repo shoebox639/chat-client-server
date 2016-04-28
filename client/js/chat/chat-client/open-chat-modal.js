@@ -1,7 +1,7 @@
 import ChatClientController  from './chat-client.controller';
 import template  from './chat-client.html';
 
-export default function openChatModal(ChatService, $uibModal){
+export default function openChatModal($uibModal){
   return function(chat) {
     $uibModal.open({
       controller: ChatClientController,
@@ -13,4 +13,4 @@ export default function openChatModal(ChatService, $uibModal){
   }
 };
 
-openChatModal.$inject = ['ChatService', '$uibModal'];
+openChatModal.$inject = ['$uibModal'];

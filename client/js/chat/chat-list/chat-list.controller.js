@@ -1,8 +1,12 @@
 class ChatListController {
-  constructor($scope, ChatService, openChatModal) {
+  constructor($scope, ChatService, openChatModal, $cookies) {
     this.openChatModal = openChatModal;
+    this.username = $cookies.get('username');
+
     $scope.$on('$destroy', () => {
-      ChatService.close();
+      if (ChatService.connection) {
+        ChatService.connection.close();
+      }
     });
   }
   
@@ -11,6 +15,6 @@ class ChatListController {
   }
 }
 
-ChatListController.$inject = ['$scope', 'ChatService', 'openChatModal', 'chatrooms'];
+ChatListController.$inject = ['$scope', 'ChatService', 'openChatModal', '$cookies'];
 
 module.exports = ChatListController

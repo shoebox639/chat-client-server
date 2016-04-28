@@ -13,15 +13,14 @@ router.ws('/', function(ws, req) {
   const chat = chatHandler(ws);
   const connect = connectHandler(ws);
 
-  const msgHandlers = {
-    'connect': connect(ws)
+  let msgHandlers = {
+    'connect': connect
   };
 
-  extend(msgHandlers, chat);
+  msgHandlers = extend(msgHandlers, chat);
 
   ws.on('message', function(evt) {
     const msg = new SocketMessage(evt);
-    // console.log(msg);
 
     const handler = msgHandlers[msg.type];
     if (handler) {
@@ -32,7 +31,7 @@ router.ws('/', function(ws, req) {
   ws.on('close', function(evt) {
     console.error(evt);
     openConnections.remove(ws);
-    console.log('closing!');
+    console.log('connection closing!');
   })
 });
  

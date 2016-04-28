@@ -1,9 +1,17 @@
-<div class="row">
-  <div class="col-md-4" ng-repeat="chat in $ctrl.chats" ng-click="$ctrl.openChat(chat)">
-    <h4>Chat #{{chat.id}}</h4>
-    <p>
-      <strong>{{ chat.messages[0].sender }}:</strong>
-      <span>{{ chat.messages[0].content }}</span>
-    </p>
+  <div class="row">
+    <div class="col-md-4 col-sm-4 col-xs-6" ng-repeat="chat in $ctrl.chats">
+      <h4>{{chat.id}} <span class="badge">{{ chat.numUnread() }}</span></h4>
+        <p ng-if="chat.messages.length">
+          <small>
+            <strong>{{ $ctr.username === chat.lastMessage().sender ? 'You' : chat.lastMessage().sender }}:</strong>
+            <span>{{ chat.lastMessage().content }}</span>
+          </small>
+        </p>
+      <p ng-if="!chat.messages.length">
+        <small>No Activity Yet...</small>
+      </p>
+      <div class="form-group">
+        <button class="btn btn-primary" ng-click="$ctrl.openChat(chat)">Join</button>
+      </div>
+    </div>
   </div>
-</div>

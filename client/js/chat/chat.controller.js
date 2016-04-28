@@ -1,13 +1,15 @@
 class ChatController {
-  constructor($scope, $location, ChatService, chatrooms) {
-    this.username = $location.search().username;
+  constructor($location, ChatService, chatrooms) {
+    if (!ChatService.connection) {
+      return $location.path('/');
+    }
 
-    ChatService.init(this.username);
+    ChatService.connection.getChats();
 
     this.chats = chatrooms;
   }
 }
 
-ChatController.$inject = ['$scope', '$location', 'ChatService', 'chatrooms'];
+ChatController.$inject = ['$location', 'ChatService', 'chatrooms'];
 
 module.exports = ChatController;

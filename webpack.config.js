@@ -7,6 +7,7 @@ module.exports = {
   externals: {
     angular: 'angular',
     'angular-route': 'angular-route',
+    'angular-cookies': 'angular-cookies',
     'angular-bootstrap': 'angular-bootstrap'
   },
   module: {

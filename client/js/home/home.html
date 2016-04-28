@@ -1,6 +1,12 @@
-<form class="form-inline" ng-submit="$ctrl.submit($ctrl.usernameInput)">
+<form novalidate name="$ctrl.form" class="form-inline" ng-submit="$ctrl.submit($ctrl.usernameInput)">
   <div class="form-group">
-    <input class="form-control" ng-model="$ctrl.usernameInput" placeholder="Username"/>
-    <button type="submit" class="btn btn-primary">Connect</button>
+    <input class="form-control" name="username" required unique ng-model="$ctrl.usernameInput" placeholder="Username" style="width: 300px;"/>
+    <div ng-show="$ctrl.form.$submitted || $ctrl.form.username.$dirty">
+      <div class="error" ng-show="$ctrl.form.username.$error.required">Please supply a username.</div>
+      <div class="error" ng-show="$ctrl.form.username.$error.unique">This username is already taken, try another.</div>
+    </div>
+  </div>
+  <div class="form-group" style="vertical-align: top;">
+    <button type="submit" ng-disabled="($ctrl.form.$submitted || $ctrl.form.$dirty) && $ctrl.form.$invalid" class="btn btn-primary">Connect</button>
   </div>
 </form>

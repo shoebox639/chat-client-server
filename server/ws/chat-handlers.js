@@ -14,7 +14,7 @@ module.exports = (ws) => {
         }
       }).toString());
     },
-    
+
     'send-message': function(msg) {
       const chatId = msg.content.chatId;
       chats[chatId].addMessage(msg.content.chatMsg);

@@ -2,17 +2,32 @@ import ChatMessage from '../../../../chat/chat-message';
 
 class ChatClientController {
   constructor($scope, ChatService, chat) {
+    $scope.$ctrl = this;
+
     this.chat = chat;
     this.$scope = $scope;
-    $scope.$ctrl = this;
     this.model = {};
-    this.ChatService = ChatService;
+    this.chatConnection = ChatService.connection;
+    this.inputText = '';
+
+    this.chat.readAll();
+
+    $scope.$watch('$ctrl.chat.messages', () => {
+      this.chat.readAll();
+    }, true);
+
+    $scope.$on('emoji-selected', (evt, emoji) => {
+      this.inputText += emoji;
+    })
   }
 
 
   sendMessage(content) {
-    this.ChatService.sendMessage(this.chat.id, new ChatMessage(this.username, content));
-    this.inputText = '';
+    const santitzied = content.trim();
+    if (santitzied) {
+      this.chatConnection.sendMessage(this.chat.id, new ChatMessage(this.username, santitzied));
+      this.inputText = '';
+    }
   }
 }
 

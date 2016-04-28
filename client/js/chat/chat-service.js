@@ -2,68 +2,51 @@ import SocketMessage from '../../../websocket/socket-message';
 import ChatRoom from '../../../chat/chat-room';
 import extend from 'extend';
 
-export default function ChatServiceFactory($rootScope, chatrooms){
-  class WS {
+const onActiveChats = (ws, chatrooms) => (msg) => {
+  console.log(msg.content.chats);
+  Object.keys(msg.content.chats).forEach((id) => {
+    chatrooms.rooms[id] = new ChatRoom(msg.content.chats[id]);
+  });
+};
+
+const onNewMessage = (ws, chatrooms) => (msg) => {
+  chatrooms.rooms[msg.content.chatId].addMessage(msg.content.chatMsg);
+};
+
+export default function ChatServiceFactory($rootScope, $q, chatrooms){
+  class Connection {
+    constructor(ws, username) {
+      this.ws = ws;
+      this.username = username;
+
+      const msgHandlers = {
+        'active-chats': onActiveChats(ws, chatrooms),
+        'new-message': onNewMessage(ws, chatrooms),
+      }
+
+      this.ws.onmessage = (evt) => {
+        $rootScope.$apply(() => {
+          var msg = new SocketMessage(evt.data);
+          console.log("ws message: ", msg);
+
+          const handler = msgHandlers[msg.type];
+          if (handler) {
+            handler(msg);
+          }
+        });
+      };
+    }
+
     close() {
       if (this.ws) {
         this.ws.close();
       }
     }
 
-    onServerAck(msg) {
+    getChats() {
       this.ws.send(new SocketMessage({
         type: 'get-chats'
       }).toString());
-    }
-
-    onActiveChats(msg) {
-      $rootScope.$apply(() => {
-        chatrooms.rooms = msg.content.chats.map(chatJson => new ChatRoom(chatJson));
-      });
-    }
-
-    onNewMessage(msg) {
-      $rootScope.$apply(() => {
-        chatrooms.rooms[msg.content.chatId].addMessage(msg.content.chatMsg);
-      });
-    }
-
-    init(username) {
-      this.username = username;
-
-      const msgHandlers = {
-        'server-ack': this.onServerAck.bind(this),
-        'active-chats': this.onActiveChats.bind(this),
-        'new-message': this.onNewMessage.bind(this)
-      }
-      
-      this.ws = new WebSocket('ws://localhost:8080/chat');
-      this.ws.onopen = () => {
-        this.ws.send(new SocketMessage({
-          type: 'connect',
-          content: {
-            username
-          }
-        }).toString());
-      };
-
-      this.ws.onmessage = (evt) => {
-        var msg = new SocketMessage(evt.data);
-        console.log("ws message: ", msg);
-
-        const handler = msgHandlers[msg.type];
-        if (handler) {
-          handler(msg);
-        }
-      };
-
-      this.ws.onclose = () => {
-        console.log("Connection is closed..."); 
-      };
-
-      this.ws.onerror = (ev) => {
-        console.error("Socket error: " + ev.data);
-      }
     }
 
     sendMessage(chatId, chatMsg) {
@@ -78,7 +61,48 @@ export default function ChatServiceFactory($rootScope, chatrooms){
     }
   }
 
-  return new WS();
+  return {
+    connect(username) {
+      const deferred = $q.defer()
+
+      const ws = new WebSocket('ws://localhost:8080/chat');
+
+      ws.onopen = () => {
+        ws.send(new SocketMessage({
+          type: 'connect',
+          content: { username }
+        }).toString());
+      };
+
+      ws.onmessage = (evt) => {
+        $rootScope.$apply(() => {
+          var msg = new SocketMessage(evt.data);
+
+          if (msg.type === 'server-ack') {
+            const connection = new Connection(ws, username);
+            this.connection = connection;
+
+            deferred.resolve(connection);
+          }
+          else if (msg.type === 'username-rejected') {
+            deferred.reject('username-rejected');
+          }
+        });
+      };
+
+      ws.onclose = (ev) => {
+        console.log("Connection is closed..."); 
+        deferred.reject(ev);
+      };
+
+      ws.onerror = (ev) => {
+        console.error("Socket error: " + ev.data);
+        deferred.reject(ev);
+      }
+
+      return deferred.promise;
+    }
+  };
 }
 
-ChatServiceFactory.$inject = ['$rootScope', 'chatrooms'];
+ChatServiceFactory.$inject = ['$rootScope', '$q', 'chatrooms'];
