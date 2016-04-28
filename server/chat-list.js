@@ -7,4 +7,5 @@ module.exports = {
   'Stargate: Universe': new Chat('Stargate: Universe')
 };
 
-module.exports['Firefly'].addMessage(new ChatMessage('Joss Whedon', 'It was cancelled too early!'));
+module.exports['Firefly'].addMessage(new ChatMessage('Joss Whedon', "At least I'm famous now"));
+module.exports['Gattlestar Galactica'].addMessage(new ChatMessage('bsgSucksLulz', "It should have been cancelled way earlier!"));
