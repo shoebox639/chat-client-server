@@ -15,7 +15,9 @@
 }
 
 .chat-body {
+  overflow-y: scroll;
   min-height: 400px;
+  max-height: 400px;
 }
 
 .emoji-list {
@@ -47,4 +49,5 @@ form .error {
   border: 1px #222 solid;
   border-radius:10px;
   margin-bottom:20px;
+  min-height: 200px;
 }

@@ -14,6 +14,7 @@ class ChatClientController {
 
     $scope.$watch('$ctrl.chat.messages', () => {
       this.chat.readAll();
+      this.scrollBottom();
     }, true);
 
     $scope.$on('emoji-selected', (evt, emoji) => {
@@ -21,6 +22,12 @@ class ChatClientController {
     })
   }
 
+  scrollBottom() {
+    const elem = document.querySelector('.chat-body');
+    if (elem) {
+      elem.scrollTop = elem.scrollHeight;
+    }
+  }
 
   sendMessage(content) {
     const santitzied = content.trim();
