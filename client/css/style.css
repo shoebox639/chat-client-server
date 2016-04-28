@@ -41,3 +41,10 @@ form.ng-submitted .ng-invalid {
 form .error {
   color: #f00;
 }
+
+.chatroom {
+  padding: 10px;
+  border: 1px #222 solid;
+  border-radius:10px;
+  margin-bottom:20px;
+}
