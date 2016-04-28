@@ -13,7 +13,7 @@ const module = angular.module(moduleName, ['ngRoute', 'ngCookies', ChatList]);
 module.config(function($routeProvider, $locationProvider) {
   $routeProvider.when('/chat', { 
     template: `<chat-page></chat-page>`,
-    title: 'Cancelled',
+    title: 'Chatrooms: Cancelled',
     subtitle: 'Talk about all the shows that were cancelled too early.'
   });
 });
